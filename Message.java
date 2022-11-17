@@ -3,7 +3,8 @@ import java.util.Scanner;
 public class Message {
 
 
-	private Scanner input;
+	private Scanner input; // mia xara
+	
 
 
 	public String setMessage() {
