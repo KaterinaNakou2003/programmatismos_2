@@ -1,10 +1,15 @@
 import java.util.Scanner;
 
 public class User {
-	protected  static String username = "yeah";
+	protected  static String username;
 	private static String password;
 
 	public static void main(String[] args) {
+		//syndesh me to login kai signin part
+		//Start start = new Start();  perimenw ton eri
+		//username = getUsername();
+		//password = getPassword();
+
 		int action=0, y;
 		String answer=null;
 		System.out.println("Welcome to Codecom " + username + " !");
@@ -13,10 +18,11 @@ public class User {
 		try{
 			action = input.nextInt();
 		} catch (Exception E) {
-						 System.err.println("User input was not a number.");
+			 System.err.println("User input was not a number.");
 		}
 
-		Message message = new Message(); // syndesh me class Message
+		// sundesh me th message
+		Message message = new Message();
 		boolean flag = false ;
 
 		while (action!=6 || flag!= true) {
@@ -25,12 +31,12 @@ public class User {
 			else if (action==2) {
 				System.out.println("Type the number of the message you want to like: ");
 				y = input.nextInt();
-				message.likeMessage(); // username autou pou to kanei & username autoy pou to stelnei mesw bd
+				message.likeMessage(y); // username autou pou to kanei & username autoy pou to stelnei mesw bd
 				System.out.println();
 			} else if (action==3) {
-				System.out.println("Type the number of the message you want to like: ");
+				System.out.println("Type the number of the message you want to dislike: ");
 				y = input.nextInt();
-				message.dislikeMessage(); // username autou pou to kanei & username autoy pou to stelnei mesw bd
+				message.dislikeMessage(y); // username autou pou to kanei & username autoy pou to stelnei mesw bd
 				System.out.println();
 			} else if (action==4) {
 				// moliw mpei h vash
@@ -60,5 +66,7 @@ public class User {
 		} // telos while
 
 	} // telos main
+
+} // telos user
 
 } // telos user
