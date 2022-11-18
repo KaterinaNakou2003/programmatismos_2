@@ -15,7 +15,7 @@ public class Message {
 	public void sendMessage(String username){
 		System.out.println("Type your message");
 		System.out.println(username + ":" +setMessage()); // na fainetai poiow to egrapse
-		// me multithreading vgainei
+		
 	}
 	//dexetai mhnyma
 	public void getMessage(String username) {
@@ -29,7 +29,7 @@ public class Message {
 	}
 	//tou xrhstou
 	public void likeMessage() {};
-
+	// addition
 	public void dislikeMessage() {};
 
 	public void problem(int numberOfMessage) {
