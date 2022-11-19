@@ -23,7 +23,13 @@ signininfo.put(username,password);
 protected HashMap getSignininfo(){
     return signininfo;
 }
+public String getUsername(){
+    return signininfo.get(password);
+}
 
+public String getPassword() {
+    return signininfo.get(username);
+}
 
 
 
