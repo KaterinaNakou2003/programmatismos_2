@@ -31,9 +31,12 @@ public class User {
 				message.sendMessage(username);
 			else if (action==2) {
 				System.out.println("Type the number of the message you want to like: ");
-				y = input.nextInt();
-				message.likeMessage(username, y); // username autou pou to kanei & username autoy pou to stelnei mesw bd
-				System.out.println();
+	                        y = input.nextInt();
+	                        String name = likedUser(username,y);
+	                        System.out.println(username +"\t" +"liked a post of user" +"\t" +name +"(post" +"\t" +y +")");
+	                        int messagelikes = likeCounter(y);
+	                        System.out.println("total likes of post" + "\t"  +y  +"\t" +"are"  +"\t"+ messagelikes);
+	                }
 			} else if (action==3) {
 				System.out.println("Type the number of the message you want to dislike: ");
 				y = input.nextInt();
