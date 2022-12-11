@@ -39,9 +39,11 @@ public class User {
 	                }
 			} else if (action==3) {
 				System.out.println("Type the number of the message you want to dislike: ");
-				y = input.nextInt();
-				message.dislikeMessage(username, y); // username autou pou to kanei & username autoy pou to stelnei mesw bd
-				System.out.println();
+	            		y = input.nextInt();
+				name = dislikedUser(username,y);
+    				System.out.println(username +"\t" +"disliked a post of user" +"\t" +name +"(post" +"\t" +y +")");	
+   				int messagedislikes = dislikeCounter(y);
+				System.out.println("total dislikes of post" + "\t"  +y  +"\t" +"are"  +"\t"+ messagedislikes);	
 			} else if (action==4) {
 				// moliw mpei h vash
 				//briskv to y se poio username antistoixei kai to reply tha ginei typou (string, string)
