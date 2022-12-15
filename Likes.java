@@ -1,7 +1,5 @@
 public class Likes {
-
 	public String likedUser(String username,int y){
-
 		connectWithDB();
 		String lkduser = SELECT sender FROM Messages WHERE message_id = y;
 		SQL_statement = "INSERT INTO Likes(message_id,liked_user,liker) VALUES('"+y+"','"+lkduser+"','"+username+"');";
@@ -14,16 +12,11 @@ public class Likes {
 		}catch (SQLException e){
 			System.out.println("SQL statement exception" + e)
 		}
-
 	}
-
 	public int likeCounter(int y){
     	int d = SELECT COUNT(*) FROM Likes WHERE message_id=y;
     	return d;
-
 	}
-
-
 	public void connectWithDB(){
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -38,7 +31,4 @@ public class Likes {
 			System.out.println("Error loading driver")
 		}
 	}
-
-
-
 }
