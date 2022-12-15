@@ -1,67 +1,144 @@
+package net.codejava.sql;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import java.util.Scanner;
 
+
 public class User {
-	protected  static String username;
-	private static String password;
+
+
 
 	public static void main(String[] args) {
-		//syndesh me to login kai signin part
-		Start start = new Start();
-	//	username = getUsername();
-		//password = getPassword();
 
-		int action=0, y;
-
-		System.out.println("Welcome to Codecom " + username + " !");
-		System.out.println( "\n What do you want to do \n 1.Post something \n 2.Like a message \n 3.Like a message \n 4.Reply \n 5.Settings \n 6.Logout");
-		Scanner input = new Scanner(System.in);
-		try{
-			action = input.nextInt();
-		} catch (Exception E) {
-						 System.err.println("User input was not a number.");
+		Connection conn = null;
+		Statement st = null;
+   		ResultSet rs = null;
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			conn = DriverManager.getConnection(
+				"jdbc:sqlserver://DESKTOP-NVDOEDC:1433;"
+				+ "DatabaseName=Codecom;encrypt=true;trustServerCertificate=true;", "Progr2", "programmatismos2");;
+		} catch (Exception exception) {
+			System.out.println("DB Connection Exception " + exception);
 		}
 
-		// sundesh me th message
+		String username;
+		Scanner input = new Scanner(System.in);
+		Account account = new Account();
 		Message message = new Message();
 		Logout logout = new Logout();
 		boolean flag = false;
+		int x;
+
+		while(true) {
+			System.out.println("welcome to Codecom");
+			System.out.println("Press 1 to SignUp or 2 to SignIn");
+
+			try {
+				x = input.nextInt();
+				break;
+			} catch(Exception wException) {
+			  	System.out.println("There was mismatch");
+				input.nextLine();
+			}
+		}
+
+		if(x==1) {
+			account.setUsername();
+			account.setPassword();
+
+
+			if (account.checkUsername(account.getUsername())) {
+				System.out.println ("This username already exists");
+			  	System.out.println ("Try again");
+			  	account.setUsername();
+			  	account.setPassword();
+			} else {
+				int result = account.addAccount(account.getUsername(),account.getPassword());
+
+
+			 	 if (result==1) {
+					username = account.getUsername();
+					System.out.println("Welcome " + username);
+			  	} else {
+					System.out.println("Person not added:Error");
+				}
+			}
+
+		} else {
+			account.setUsername();
+			account.setPassword();
+			account.verifyAccount(account.getUsername(),account.getPassword());
+			message.getMessage(username);
+		}
+
+		//connection with db
+
+
+
+		int action=0, y;
+
+		System.out.println("Have fun " + username + " !");
+		System.out.println( "\n What do you want to do: \n 1.Send a message \n 2.Like a message \n 3.Dislike a message \n 4.Reply to message \n 5.Logout");
 
 		while (action != 6 || flag != true) {
 			if (action==1)
 				message.sendMessage(username);
 			else if (action==2) {
 				System.out.println("Type the number of the message you want to like: ");
-	                        y = input.nextInt();
-	                        String name = likedUser(username,y);
-	                        System.out.println(username +"\t" +"liked a post of user" +"\t" +name +"(post" +"\t" +y +")");
-	                        int messagelikes = likeCounter(y);
-	                        System.out.println("total likes of post" + "\t"  +y  +"\t" +"are"  +"\t"+ messagelikes);
-	                }
+				y = input.nextInt();
+				message.likeMessage(username, y); // username autou pou to kanei & username autoy pou to stelnei mesw bd
+				System.out.println();
 			} else if (action==3) {
 				System.out.println("Type the number of the message you want to dislike: ");
-	            		y = input.nextInt();
-				name = dislikedUser(username,y);
-    				System.out.println(username +"\t" +"disliked a post of user" +"\t" +name +"(post" +"\t" +y +")");	
-   				int messagedislikes = dislikeCounter(y);
-				System.out.println("total dislikes of post" + "\t"  +y  +"\t" +"are"  +"\t"+ messagedislikes);	
+				y = input.nextInt();
+				message.dislikeMessage(username, y); // username autou pou to kanei & username autoy pou to stelnei mesw bd
+				System.out.println();
 			} else if (action==4) {
 				// moliw mpei h vash
 				//briskv to y se poio username antistoixei kai to reply tha ginei typou (string, string)
 				System.out.print("Type the number of the message you want to reply to: ");
 				 y = input.nextInt();
 				message.reply(username, y);
-			} else if (action == 6 ) {
+			} else if (action == 5 ) {
 				System.out.println(" Are you sure you want to logout; (Y/N) ");
 				String answer = input.next();
 				flag = logout.getLogout(answer);
 			}
 
 			if (flag != true) { // mporei panv na egine true alla am janarvthsv ti na kanei kai allajei den tha teelivsei o vroxos
-				System.out.println("What do you want to do next");
+				System.out.println("What do you want to do next;");
 				action = input.nextInt();
 			}
 		} // telos while
 
+		// everytime a user logs out from codecom we save the number of the last message of db
+		String SQL_statement = "SELECT TOP 1 message_id FROM Messages ORDER BY message_id DESC;";
+		try {
+			st = conn.createStatement();
+			rs = st.executeQuery(SQL_statement);
+			rs.first();
+			int nors = rs.getInt("message_id");// finds the number of the last message in db
+			SQL_statement = "INSERT INTO Logout(username, lastmessageseen) VALUES( '" + username + " ' , " + nors + ");";
+			rs.close();
+			st.close();
+			try {
+				st = conn.createStatement();
+				st.executeUpdate(SQL_statement); // inserts in table logout the number of this last message
+				st.close();
+			} catch (SQLException e) {
+				System.out.println("SQL statement exception" + e);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("SQL statement exception" + e);
+
+		}
+
 	} // telos main
 
-} // telos user
+} 
