@@ -1,7 +1,7 @@
 public class Likes {
 	public String likedUser(String username,int y){
 		connectWithDB();
-		String lkduser = SELECT sender FROM Messages WHERE message_id = y;
+		String lkduser = "SELECT sender FROM Messages WHERE message_id ="+ y;
 		SQL_statement = "INSERT INTO Likes(message_id,liked_user,liker) VALUES('"+y+"','"+lkduser+"','"+username+"');";
 		return lkduser;
 		// update db
@@ -14,7 +14,7 @@ public class Likes {
 		}
 	}
 	public int likeCounter(int y){
-    	int d = SELECT COUNT(*) FROM Likes WHERE message_id=y;
+    	int d = "SELECT COUNT(*) FROM Likes WHERE message_id="+y;
     	return d;
 	}
 	public void connectWithDB(){
