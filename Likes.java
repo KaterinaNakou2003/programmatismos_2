@@ -34,6 +34,8 @@ public class Likes {
 		} catch (SQLException e) {
 					System.err.println("Connection failed");
 					e.printStackTrace();
+		} catch(ClassNotFoundException cnfe){
+			System.out.println("Error loading driver")
 		}
 	}
 
