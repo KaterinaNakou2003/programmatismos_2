@@ -43,7 +43,7 @@ public class User {
 				x = input.nextInt();
 				break;
 			} catch(Exception wException) {
-			  	System.out.println("There was mismatch");
+			  	System.out.println("There was a mismatch");
 				input.nextLine();
 			}
 		}
@@ -65,9 +65,11 @@ public class User {
 			 	 if (result==1) {
 					username = account.getUsername();
 					System.out.println("Welcome " + username);
+					 System.out.println("\n\n\n\n\n\n\n\n\n\n");
 					System.out.println("--INSTRUCTIONS for beginners-- ");
 					System.out.println("Change of mind? \n For action 1 to 4 if you want to back out type exit and then press enter in the body text");
 					System.out.println("Please, do not try to find another way to back out so as for CodeCom to	fuction properly... \n Help us Help you!!");
+					 System.out.println("\n\n\n\n\n\n\n\n\n\n");
 			  	} else {
 					System.out.println("Person not added:Error");
 				}
@@ -150,9 +152,11 @@ public class User {
 					System.out.println("SQL statement exception" + e);
 				}
 			} else if (action == 6 ) {
+				System.out.println("\n\n\n\n\n\n\n\n\n\n");
 				System.out.println("--INSTRUCTIONS-- ");
 				System.out.println("Change of mind? \n For action 1 to 4 if you want to back out type exit and then press enter in the body text");
-					System.out.println("Please, do not try to find another way to back out so as for CodeCom to	fuction properly... \n Help us Help you!!");
+				System.out.println("Please, do not try to find another way to back out so as for CodeCom to	fuction properly... \n Help us Help you!!");
+				System.out.println("\n\n\n\n\n\n\n\n\n\n");
 			} else if (action == 5 ) {
 				System.out.println(" Are you sure you want to logout; (Y/N) ");
 				String answer = input.next();
