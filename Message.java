@@ -31,18 +31,22 @@ public class Message {
 		System.out.println("Type your message");
 		Scanner input = new Scanner(System.in);
 		String answer = input.nextLine();
-		System.out.println(username + ":" + answer);
-		//update db
-		SQL_statement = "INSERT INTO Messages(sender,message_body) VALUES ( '" + username + " ' , '" + answer + "');";
-		try {
-			if (conn != null ) {
-				st = conn.createStatement();
-				st.executeUpdate(SQL_statement);
-				st.close();
-				conn.close();
+		if (!answer.equals("exit")) {
+			System.out.println(username + ":" + answer);
+			//update db
+			SQL_statement = "INSERT INTO Messages(sender,message_body) VALUES ( '" + username + " ' , '" + answer + "');";
+			try {
+				if (conn != null ) {
+					st = conn.createStatement();
+					st.executeUpdate(SQL_statement);
+					st.close();
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("SQL statement exception" + e);
 			}
-		} catch (SQLException e) {
-			System.out.println("SQL statement exception" + e);
+		} else {
+			System.out.println("ACTION CANCELLED");
 		}
 
 	}// telos sendMessage
@@ -87,31 +91,35 @@ public class Message {
 		System.out.println("Type your message");
 		Scanner input = new Scanner(System.in);
 		String answer = input.nextLine();
-		//updates Messages table
-		SQL_statement = "INSERT INTO Messages(sender,message_body) VALUES ( '" + username + " ' , '" + answer + "')";
-		try {
-			if (conn != null ) {
-				st = conn.createStatement();
-				st.executeUpdate(SQL_statement);
-				st.close();
+		if (!answer.equals("exit")) {
+			//updates Messages table
+			SQL_statement = "INSERT INTO Messages(sender,message_body) VALUES ( '" + username + " ' , '" + answer + "')";
+			try {
+				if (conn != null ) {
+					st = conn.createStatement();
+					st.executeUpdate(SQL_statement);
+					st.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("SQL statement exception" + e);
 			}
-		} catch (SQLException e) {
-			System.out.println("SQL statement exception" + e);
-		}
-		//prints message to user
-		SQL_statement = "SELECT message_body,sender FROM Messages WHERE message_id = " + numberOfMessage;
-		try {
-			if (conn != null ) {
-				st = conn.createStatement();
-				rs = st.executeQuery(SQL_statement);
-				rs.first();
-				System.out.println(username + " replied to " + rs.getString("message_body") + " : " + answer );
-				st.close();
-				rs.close();
-				conn.close();
+			//prints message to user
+			SQL_statement = "SELECT message_body,sender FROM Messages WHERE message_id = " + numberOfMessage;
+			try {
+				if (conn != null ) {
+					st = conn.createStatement();
+					rs = st.executeQuery(SQL_statement);
+					rs.first();
+					System.out.println(username + " replied to " + rs.getString("message_body") + " : " + answer );
+					st.close();
+					rs.close();
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("SQL statement exception" + e);
 			}
-		} catch (SQLException e) {
-			System.out.println("SQL statement exception" + e);
+		} else {
+			System.out.println("ACTION CANCELLED");
 		}
 
 	}//telos reply
