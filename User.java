@@ -17,6 +17,7 @@ public class User {
 		Connection conn = null;
 		Statement st = null;
    		ResultSet rs = null;
+   		String SQL_statement;
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			conn = DriverManager.getConnection(
@@ -25,12 +26,12 @@ public class User {
 		} catch (Exception exception) {
 			System.out.println("DB Connection Exception " + exception);
 		}
-
 		String username;
 		Scanner input = new Scanner(System.in);
 		Account account = new Account();
 		Message message = new Message();
 		Logout logout = new Logout();
+
 		boolean flag = false;
 		int x;
 
@@ -64,6 +65,9 @@ public class User {
 			 	 if (result==1) {
 					username = account.getUsername();
 					System.out.println("Welcome " + username);
+					System.out.println("--INSTRUCTIONS for beginners-- ");
+					System.out.println("Change of mind? \n For action 1 to 4 if you want to back out type exit and then press enter in the body text");
+					System.out.println("Please, do not try to find another way to back out so as for CodeCom to	fuction properly... \n Help us Help you!!");
 			  	} else {
 					System.out.println("Person not added:Error");
 				}
@@ -73,37 +77,82 @@ public class User {
 			account.setUsername();
 			account.setPassword();
 			account.verifyAccount(account.getUsername(),account.getPassword());
+			System.out.println("Have fun " + username + " !");
 			message.getMessage(username);
 		}
 
-		//connection with db
-
-
-
 		int action=0, y;
+		System.out.print( "\n What do you want to do: \n 1.Send a message \n 2.Like a message \n 3.Dislike a message \n 4.Reply to message \n 5.Logout \n 6.Instructions \n");
 
-		System.out.println("Have fun " + username + " !");
-		System.out.println( "\n What do you want to do: \n 1.Send a message \n 2.Like a message \n 3.Dislike a message \n 4.Reply to message \n 5.Logout");
-
-		while (action != 6 || flag != true) {
+		while (action != 5 || flag != true) {
 			if (action==1)
 				message.sendMessage(username);
 			else if (action==2) {
 				System.out.println("Type the number of the message you want to like: ");
 				y = input.nextInt();
-				message.likeMessage(username, y); // username autou pou to kanei & username autoy pou to stelnei mesw bd
+				SQL_statement = "SELECT TOP 1 message_id FROM Messages ORDER BY message_id DESC;";
+				try {
+					if (conn != null ) {
+						st = conn.createStatement();
+						rs = st.executeQuery(SQL_statement);// finds the last message in db
+						rs.first();
+						if (rs.getInt("message_id") >= y) {
+							message.likeMessage(username, y);
+						} else {
+							System.out.println("ERROR!! We cannot find the message you want to reply to.");
+						}
+					}
+					st.close();
+					rs.close();
+				} catch (SQLException e) {
+					System.out.println("SQL statement exception" + e);
+				}
 				System.out.println();
 			} else if (action==3) {
 				System.out.println("Type the number of the message you want to dislike: ");
 				y = input.nextInt();
-				message.dislikeMessage(username, y); // username autou pou to kanei & username autoy pou to stelnei mesw bd
+				SQL_statement = "SELECT TOP 1 message_id FROM Messages ORDER BY message_id DESC;";
+				try {
+					if (conn != null ) {
+						st = conn.createStatement();
+						rs = st.executeQuery(SQL_statement);// finds the last message in db
+						rs.first();
+						if (rs.getInt("message_id") >= y) {
+							message.dislikeMessage(username, y);
+						} else {
+							System.out.println("ERROR!! We cannot find the message you want to reply to.");
+						}
+					}
+					st.close();
+					rs.close();
+				} catch (SQLException e) {
+					System.out.println("SQL statement exception" + e);
+				}
 				System.out.println();
 			} else if (action==4) {
-				// moliw mpei h vash
-				//briskv to y se poio username antistoixei kai to reply tha ginei typou (string, string)
 				System.out.print("Type the number of the message you want to reply to: ");
 				 y = input.nextInt();
-				message.reply(username, y);
+				SQL_statement = "SELECT TOP 1 message_id FROM Messages ORDER BY message_id DESC;";
+				try {
+					if (conn != null ) {
+						st = conn.createStatement();
+						rs = st.executeQuery(SQL_statement);// finds the last message in db
+						rs.first();
+						if (rs.getInt("message_id") >= y) {
+							message.reply(username, y);
+						} else {
+							System.out.println("ERROR!! We cannot find the message you want to reply to.");
+						}
+					}
+					st.close();
+					rs.close();
+				} catch (SQLException e) {
+					System.out.println("SQL statement exception" + e);
+				}
+			} else if (action == 6 ) {
+				System.out.println("--INSTRUCTIONS-- ");
+				System.out.println("Change of mind? \n For action 1 to 4 if you want to back out type exit and then press enter in the body text");
+					System.out.println("Please, do not try to find another way to back out so as for CodeCom to	fuction properly... \n Help us Help you!!");
 			} else if (action == 5 ) {
 				System.out.println(" Are you sure you want to logout; (Y/N) ");
 				String answer = input.next();
@@ -117,7 +166,7 @@ public class User {
 		} // telos while
 
 		// everytime a user logs out from codecom we save the number of the last message of db
-		String SQL_statement = "SELECT TOP 1 message_id FROM Messages ORDER BY message_id DESC;";
+		SQL_statement = "SELECT TOP 1 message_id FROM Messages ORDER BY message_id DESC;";
 		try {
 			st = conn.createStatement();
 			rs = st.executeQuery(SQL_statement);
@@ -141,4 +190,4 @@ public class User {
 
 	} // telos main
 
-} 
+} // telos user
