@@ -26,7 +26,7 @@ public class User {
 		} catch (Exception exception) {
 			System.out.println("DB Connection Exception " + exception);
 		}
-		String username;
+		String username = null;
 		Scanner input = new Scanner(System.in);
 		Account account = new Account();
 		Message message = new Message();
@@ -36,7 +36,7 @@ public class User {
 		int x;
 
 		while(true) {
-			System.out.println("welcome to Codecom");
+			System.out.println("Welcome to Codecom");
 			System.out.println("Press 1 to SignUp or 2 to SignIn");
 
 			try {
@@ -65,11 +65,11 @@ public class User {
 			 	 if (result==1) {
 					username = account.getUsername();
 					System.out.println("Welcome " + username);
-					 System.out.println("\n\n\n\n\n\n\n\n\n\n");
+					System.out.println("\n\n\n\n\n\n\n\n\n\n");
 					System.out.println("--INSTRUCTIONS for beginners-- ");
 					System.out.println("Change of mind? \n For action 1 to 4 if you want to back out type exit and then press enter in the body text");
 					System.out.println("Please, do not try to find another way to back out so as for CodeCom to	fuction properly... \n Help us Help you!!");
-					 System.out.println("\n\n\n\n\n\n\n\n\n\n");
+					System.out.println("\n\n\n\n\n\n\n\n\n\n");
 			  	} else {
 					System.out.println("Person not added:Error");
 				}
@@ -78,18 +78,25 @@ public class User {
 		} else {
 			account.setUsername();
 			account.setPassword();
-			account.verifyAccount(account.getUsername(),account.getPassword());
-			System.out.println("Have fun " + username + " !");
-			message.getMessage(username);
+			if (account.verifyAccount(account.getUsername(),account.getPassword()) == true) {
+				username=account.getUsername();
+				System.out.println("Sign In Successfull");
+				System.out.println("Hello " + username +". Have fun!" );
+				System.out.println(message.getMessage(username));
+			} else {
+				System.out.println("Account not found");
+			}
 		}
 
 		int action=0, y;
+		String answer;
 		System.out.print( "\n What do you want to do: \n 1.Send a message \n 2.Like a message \n 3.Dislike a message \n 4.Reply to message \n 5.Logout \n 6.Instructions \n");
 
 		while (action != 5 || flag != true) {
-			if (action==1)
-				message.sendMessage(username);
-			else if (action==2) {
+			if (action==1) {
+				answer = message.printMessage();
+				System.out.println(message.sendMessage(username,answer));
+			} else if (action==2) {
 				System.out.println("Type the number of the message you want to like: ");
 				y = input.nextInt();
 				SQL_statement = "SELECT TOP 1 message_id FROM Messages ORDER BY message_id DESC;";
@@ -99,7 +106,7 @@ public class User {
 						rs = st.executeQuery(SQL_statement);// finds the last message in db
 						rs.first();
 						if (rs.getInt("message_id") >= y) {
-							message.likeMessage(username, y);
+							//message.likeMessage(username, y);
 						} else {
 							System.out.println("ERROR!! We cannot find the message you want to reply to.");
 						}
@@ -120,7 +127,7 @@ public class User {
 						rs = st.executeQuery(SQL_statement);// finds the last message in db
 						rs.first();
 						if (rs.getInt("message_id") >= y) {
-							message.dislikeMessage(username, y);
+							//message.dislikeMessage(username, y);
 						} else {
 							System.out.println("ERROR!! We cannot find the message you want to reply to.");
 						}
@@ -141,7 +148,8 @@ public class User {
 						rs = st.executeQuery(SQL_statement);// finds the last message in db
 						rs.first();
 						if (rs.getInt("message_id") >= y) {
-							message.reply(username, y);
+							answer = message.printMessage();
+							System.out.println(message.reply(username, answer, y));
 						} else {
 							System.out.println("ERROR!! We cannot find the message you want to reply to.");
 						}
@@ -159,7 +167,7 @@ public class User {
 				System.out.println("\n\n\n\n\n\n\n\n\n\n");
 			} else if (action == 5 ) {
 				System.out.println(" Are you sure you want to logout; (Y/N) ");
-				String answer = input.next();
+				answer = input.next();
 				flag = logout.getLogout(answer);
 			}
 
