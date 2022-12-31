@@ -1,5 +1,4 @@
 package net.codejava.sql;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -26,33 +25,22 @@ public class Message {
 		}
 	}
 
-	public void sendMessage(String username) {
+	public String sendMessage(String username, String answer) {
+		String message = null;
 		getConnectionWithDB();
-		System.out.println("Type your message");
-		Scanner input = new Scanner(System.in);
-		String answer = input.nextLine();
 		if (!answer.equals("exit")) {
-			System.out.println(username + ":" + answer);
-			//update db
-			SQL_statement = "INSERT INTO Messages(sender,message_body) VALUES ( '" + username + " ' , '" + answer + "');";
-			try {
-				if (conn != null ) {
-					st = conn.createStatement();
-					st.executeUpdate(SQL_statement);
-					st.close();
-					conn.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("SQL statement exception" + e);
-			}
+			message = username + " : " + answer;
+			updateMessages( username, answer);
 		} else {
-			System.out.println("ACTION CANCELLED");
+			message = "ACTION CANCELLED";
 		}
-
+		return message;
 	}// telos sendMessage
 
-	public void getMessage(String user) {
+
+	public String getMessage(String user) {
 		getConnectionWithDB();
+		String message = null;
 		SQL_statement = "SELECT TOP 1 message_id FROM Messages ORDER BY message_id DESC;";
 		try {
 			if (conn != null ) {
@@ -71,38 +59,28 @@ public class Message {
 						lastLogout.first();
 						int noll = lastLogout.getInt("logout_id");
 						int result = nolmodb - noll;
-						System.out.println(user +"You have" + result + " new Messages \n You caught up with us!!");
+						message = user +"You have" + result + " new Messages \n You caught up with us!!";
+
 						st.close();
 						lastLogout.close();
 						conn.close();
 					}
 				} catch (SQLException e) {
-					System.out.println("SQL statement exception" + e);
+					message = "SQL statement exception" + e;
 				}
 			}
 		} catch (SQLException e) {
-			System.out.println("SQL statement exception" + e);
-
+			message = "SQL statement exception" + e;
 		}
+		return message;
 	}//telos getMessage
 
-	public void reply(String username, int numberOfMessage) {
+
+	public String reply(String username, String answer, int numberOfMessage) {
+		String message = null;
 		getConnectionWithDB();
-		System.out.println("Type your message");
-		Scanner input = new Scanner(System.in);
-		String answer = input.nextLine();
 		if (!answer.equals("exit")) {
-			//updates Messages table
-			SQL_statement = "INSERT INTO Messages(sender,message_body) VALUES ( '" + username + " ' , '" + answer + "')";
-			try {
-				if (conn != null ) {
-					st = conn.createStatement();
-					st.executeUpdate(SQL_statement);
-					st.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("SQL statement exception" + e);
-			}
+			updateMessages(username, answer);
 			//prints message to user
 			SQL_statement = "SELECT message_body,sender FROM Messages WHERE message_id = " + numberOfMessage;
 			try {
@@ -110,18 +88,39 @@ public class Message {
 					st = conn.createStatement();
 					rs = st.executeQuery(SQL_statement);
 					rs.first();
-					System.out.println(username + " replied to " + rs.getString("message_body") + " : " + answer );
+					message = username + " replied to " + rs.getString("message_body") + " : " + answer ;
 					st.close();
 					rs.close();
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("SQL statement exception" + e);
+				message = "SQL statement exception" + e;
 			}
 		} else {
-			System.out.println("ACTION CANCELLED");
+			message = "ACTION CANCELLED";
+		}
+		return message;
+	}//telos reply
+
+	public String printMessage() {
+		System.out.println("Type your message");
+		Scanner scanner = new Scanner(System.in);
+		String message = scanner.nextLine();
+		return message ;
+   }
+
+   public void updateMessages(String username, String answer) {
+		SQL_statement = "INSERT INTO Messages(sender,message_body) VALUES ( '" + username + " ' , '" + answer + "')";
+		try {
+			if (conn != null ) {
+				st = conn.createStatement();
+				st.executeUpdate(SQL_statement);
+				st.close();
+			}
+		} catch (SQLException e) {
+			System.out.println("SQL statement exception" + e);
 		}
 
-	}//telos reply
+   }
 
 }//telos message
