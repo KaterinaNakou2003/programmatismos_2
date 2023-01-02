@@ -27,10 +27,10 @@ public class Message {
 
 	public String sendMessage(String username, String answer) {
 		String message = null;
-		getConnectionWithDB();
 		if (!answer.equals("exit")) {
+			getConnectionWithDB();
 			message = username + " : " + answer;
-			updateMessages( username, answer);
+			updateMessages( username, answer, 0);
 		} else {
 			message = "ACTION CANCELLED";
 		}
@@ -38,7 +38,7 @@ public class Message {
 	}// telos sendMessage
 
 
-	public String getMessage(String user) {
+	public void getMessage(String user) {
 		getConnectionWithDB();
 		String message = null;
 		SQL_statement = "SELECT TOP 1 message_id FROM Messages ORDER BY message_id DESC;";
@@ -47,40 +47,82 @@ public class Message {
 				st = conn.createStatement();
 				ResultSet lastMessageOfDB = st.executeQuery(SQL_statement);// finds the number of the last message in db
 				lastMessageOfDB.first();
-				int nolmodb =lastMessageOfDB.getInt("message_id");
+				int nolmodb = lastMessageOfDB.getInt("message_id");
 				st.close();
 				lastMessageOfDB.close();
 				//find last logout of user
 				SQL_statement = "SELECT MAX(logout_id) FROM Logout WHERE username =" + "'"+ user +"'";
 				try {
-					if (conn != null ) {
+					st = conn.createStatement();
+					ResultSet lastLogout = st.executeQuery(SQL_statement);
+					lastLogout.first();
+					int noll = lastLogout.getInt("logout_id");
+					int result = nolmodb - noll;
+					System.out.println("You have" + result + " new Messages \n Let's catch up!! ");
+					st.close();
+					lastLogout.close();
+					SQL_statement = "SELECT message_id, sender, message_body, type FROM Messages WHERE message_id>" + noll + ";";
+					try {
 						st = conn.createStatement();
-						ResultSet lastLogout = st.executeQuery(SQL_statement);
-						lastLogout.first();
-						int noll = lastLogout.getInt("logout_id");
-						int result = nolmodb - noll;
-						message = user +"You have" + result + " new Messages \n You caught up with us!!";
-
+						rs = st.executeQuery(SQL_statement);
+						while(rs.next()){
+							if (rs.getInt("type") == 0) {
+						   		System.out.println(rs.getString("sender") + " : " + rs.getString("message_body"));
+							} else if (rs.getInt("type") == -1) {
+								//otan kanei like sth message tha mpainei -1
+								System.out.println(rs.getString("sender") + " liked : " + rs.getString("message_body"));
+							} else if (rs.getInt("type") == -2) {
+								//otan kanei dislike sth message tha mpainei -2
+								System.out.println(rs.getString("sender") + " disliked : " + rs.getString("message_body"));
+							} else {
+								SQL_statement = "SELECT message_body,sender,type FROM Messages WHERE message_id = " + rs.getInt("message_id");
+								try {
+									Statement st2 = conn.createStatement();
+									ResultSet rs2 = st.executeQuery(SQL_statement);
+									rs2.first();
+									String sender = rs2.getString("sender") + " replied to: ";
+									String reply = " : " + rs.getString("message_body");
+									SQL_statement = "SELECT message_body FROM Messages WHERE message_id = " + rs.getInt("type");
+									// an type 10 -> o user replied to 10o munhma, opote caxnv to message_body pou antistoixei se auton ton arithmo
+									try {
+										Statement st3 = conn.createStatement();
+										ResultSet rs3 = st.executeQuery(SQL_statement);
+										rs3.first();
+										System.out.println(sender + rs3.getString("message_body") + reply);
+										st3.close();
+										rs3.close();
+									} catch (SQLException e) {
+										System.out.println("SQL statement exception" + e);
+									}
+									st2.close();
+									rs2.close();
+								} catch (SQLException e) {
+									System.out.println("SQL statement exception" + e);
+								}
+							}// telos if
+						}//telos while
+						System.out.println("You're now ready... Have fun!");
 						st.close();
-						lastLogout.close();
-						conn.close();
+						rs.close();
+					} catch (SQLException e) {
+						System.out.println("SQL statement exception" + e);
 					}
 				} catch (SQLException e) {
-					message = "SQL statement exception" + e;
+					System.out.println("SQL statement exception" + e);
 				}
-			}
+				conn.close();
+			} // telos if conn != 0
 		} catch (SQLException e) {
-			message = "SQL statement exception" + e;
+			System.out.println("SQL statement exception" + e);
 		}
-		return message;
 	}//telos getMessage
 
 
 	public String reply(String username, String answer, int numberOfMessage) {
 		String message = null;
-		getConnectionWithDB();
 		if (!answer.equals("exit")) {
-			updateMessages(username, answer);
+			getConnectionWithDB();
+			updateMessages(username, answer, numberOfMessage);
 			//prints message to user
 			SQL_statement = "SELECT message_body,sender FROM Messages WHERE message_id = " + numberOfMessage;
 			try {
@@ -109,8 +151,8 @@ public class Message {
 		return message ;
    }
 
-   public void updateMessages(String username, String answer) {
-		SQL_statement = "INSERT INTO Messages(sender,message_body) VALUES ( '" + username + " ' , '" + answer + "')";
+   public void updateMessages(String username, String answer, int type) {
+		SQL_statement = "INSERT INTO Messages(sender,message_body,type) VALUES ( '" + username + " ' , '" + answer + " ' , " + type + ")";
 		try {
 			if (conn != null ) {
 				st = conn.createStatement();
