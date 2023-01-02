@@ -61,28 +61,28 @@ public class Message {
 					System.out.println("You have" + result + " new Messages \n Let's catch up!! ");
 					st.close();
 					lastLogout.close();
-					SQL_statement = "SELECT message_id, sender, message_body, type FROM Messages WHERE message_id>" + noll + ";";
+					SQL_statement = "SELECT message_id, sender, message_body, typeofmessage FROM Messages WHERE message_id>" + noll + ";";
 					try {
 						st = conn.createStatement();
 						rs = st.executeQuery(SQL_statement);
 						while(rs.next()){
-							if (rs.getInt("type") == 0) {
+							if (rs.getInt("typeofmessage") == 0) {
 						   		System.out.println(rs.getString("sender") + " : " + rs.getString("message_body"));
-							} else if (rs.getInt("type") == -1) {
+							} else if (rs.getInt("typeofmessage") == -1) {
 								//otan kanei like sth message tha mpainei -1
 								System.out.println(rs.getString("sender") + " liked : " + rs.getString("message_body"));
-							} else if (rs.getInt("type") == -2) {
+							} else if (rs.getInt("typeofmessage") == -2) {
 								//otan kanei dislike sth message tha mpainei -2
 								System.out.println(rs.getString("sender") + " disliked : " + rs.getString("message_body"));
 							} else {
-								SQL_statement = "SELECT message_body,sender,type FROM Messages WHERE message_id = " + rs.getInt("message_id");
+								SQL_statement = "SELECT message_body,sender,typeofmessage FROM Messages WHERE message_id = " + rs.getInt("message_id");
 								try {
 									Statement st2 = conn.createStatement();
 									ResultSet rs2 = st.executeQuery(SQL_statement);
 									rs2.first();
 									String sender = rs2.getString("sender") + " replied to: ";
-									String reply = " : " + rs.getString("message_body");
-									SQL_statement = "SELECT message_body FROM Messages WHERE message_id = " + rs.getInt("type");
+									String reply = " : " + rs2.getString("message_body");
+									SQL_statement = "SELECT message_body FROM Messages WHERE message_id = " + rs2.getInt("typeofmessage");
 									// an type 10 -> o user replied to 10o munhma, opote caxnv to message_body pou antistoixei se auton ton arithmo
 									try {
 										Statement st3 = conn.createStatement();
@@ -152,7 +152,7 @@ public class Message {
    }
 
    public void updateMessages(String username, String answer, int type) {
-		SQL_statement = "INSERT INTO Messages(sender,message_body,type) VALUES ( '" + username + " ' , '" + answer + " ' , " + type + ")";
+		SQL_statement = "INSERT INTO Messages(sender,message_body,typeofmessage) VALUES ( '" + username + " ' , '" + answer + " ' , " + type + ")";
 		try {
 			if (conn != null ) {
 				st = conn.createStatement();
