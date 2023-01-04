@@ -134,7 +134,7 @@ public class User {
 						st = conn.createStatement();
 						rs = st.executeQuery(SQL_statement);// finds the last message in db
 						rs.first();
-						if (rs.getInt("message_id") >= y &&  y != 0) {
+						if (rs.getInt("message_id") <= y &&  y != 0) {
 							Scanner input = new Scanner(System.in);
 							System.out.println("type the number of the message you want to like");
 							int y = input.nextInt();
