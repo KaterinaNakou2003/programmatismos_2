@@ -107,9 +107,16 @@ public class User {
 						rs = st.executeQuery(SQL_statement);// finds the last message in db
 						rs.first();
 						if (rs.getInt("message_id") >= y && y != 0) {
-							//message.likeMessage(username, y);
+							Scanner input = new Scanner(System.in);
+							System.out.println("type the number of the message you want to like");
+							int y = input.nextInt();
+							String likedname = likedUser(String username,int y);
+							System.out.println(username +"\t" +"liked a post of user" +"\t" +name +"(post" +"\t" +y +")");
+							like.updateLikes(String username, String likedname int y);
+							numoflikes = likeCounter(int y);
+							System.out.println("total likes of message"+"\t"+y+ "\t"+"are"+"\t"+numoflikes);
 						} else {
-							System.out.println("ERROR!! We cannot find the message you want to reply to.");
+							System.out.println("ERROR!! We cannot find the message you want to like.");
 						}
 					}
 					st.close();
@@ -137,7 +144,7 @@ public class User {
 							numoflikes = likeCounter(int y);
 							System.out.println("total likes of message"+"\t"+y+ "\t"+"are"+"\t"+numoflikes);
 						} else {
-							System.out.println("ERROR!! We cannot find the message you want to like.");
+							System.out.println("ERROR!! We cannot find the message you want to dislike.");
 						}
 					}
 					st.close();
