@@ -41,27 +41,33 @@ public class Message {
 	public void getMessage(String user) {
 		getConnectionWithDB();
 		String message = null;
-		SQL_statement = "SELECT TOP 1 message_id FROM Messages ORDER BY message_id DESC;";
+		SQL_statement = "SELECT message_id FROM Messages;";
 		try {
 			if (conn != null ) {
 				st = conn.createStatement();
-				ResultSet lastMessageOfDB = st.executeQuery(SQL_statement);// finds the number of the last message in db
-				lastMessageOfDB.first();
-				int nolmodb = lastMessageOfDB.getInt("message_id");
+				rs = st.executeQuery(SQL_statement);// finds the number of the last message in db
+				int count = 0;
+				if (rs.next()) {
+					count++;
+				}
+				int lastMssg = count;
 				st.close();
-				lastMessageOfDB.close();
+				rs.close();
 				//find last logout of user
-				SQL_statement = "SELECT MAX(logout_id) FROM Logout WHERE username =" + "'"+ user +"'";
+				SQL_statement = "SELECT logout_id FROM Logout WHERE username =" + "'"+ user +"'";
 				try {
 					st = conn.createStatement();
-					ResultSet lastLogout = st.executeQuery(SQL_statement);
-					lastLogout.first();
-					int noll = lastLogout.getInt("logout_id");
-					int result = nolmodb - noll;
+					rs = st.executeQuery(SQL_statement);
+					count = 0;
+					if (rs.next()) {
+						count++;
+					}
+					int lastLogout = count;
+					int result = lastMssg - lastLogout;
 					System.out.println("You have" + result + " new Messages \n Let's catch up!! ");
 					st.close();
-					lastLogout.close();
-					SQL_statement = "SELECT message_id, sender, message_body, typeofmessage FROM Messages WHERE message_id>" + noll + ";";
+					rs.close();
+					SQL_statement = "SELECT message_id, sender, message_body, typeofmessage FROM Messages WHERE message_id>" + lastLogout + ";";
 					try {
 						st = conn.createStatement();
 						rs = st.executeQuery(SQL_statement);
@@ -111,12 +117,13 @@ public class Message {
 					System.out.println("SQL statement exception" + e);
 				}
 				conn.close();
-			} // telos if conn != 0
+			} else {
+				System.out.println("Not Connected!");
+			}
 		} catch (SQLException e) {
 			System.out.println("SQL statement exception" + e);
 		}
 	}//telos getMessage
-
 
 	public String reply(String username, String answer, int numberOfMessage) {
 		String message = null;
