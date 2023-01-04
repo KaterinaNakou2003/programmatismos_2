@@ -177,15 +177,18 @@ public class User {
 		} // telos while
 
 		// everytime a user logs out from codecom we save the number of the last message of db
-		SQL_statement = "SELECT TOP 1 message_id FROM Messages ORDER BY message_id DESC;";
+		SQL_statement = "SELECT message_id FROM Messages;";
 		try {
 			st = conn.createStatement();
 			rs = st.executeQuery(SQL_statement);
-			rs.first();
-			int nors = rs.getInt("message_id");// finds the number of the last message in db
-			SQL_statement = "INSERT INTO Logout(username, lastmessageseen) VALUES( '" + username + " ' , " + nors + ");";
+			int count = 0;
+			if (rs.next()) {
+				count++;
+			}
+			int lastMssg = count;// finds the number of the last message in db
 			rs.close();
 			st.close();
+			SQL_statement = "INSERT INTO Logout(username, lastmessageseen) VALUES( '" + username + " ' , " + lastMssg + ");";
 			try {
 				st = conn.createStatement();
 				st.executeUpdate(SQL_statement); // inserts in table logout the number of this last message
