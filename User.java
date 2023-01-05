@@ -1,4 +1,5 @@
 package net.codejava.sql;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,8 +9,6 @@ import java.util.Scanner;
 
 
 public class User {
-
-
 
 	public static void main(String[] args) {
 
@@ -30,8 +29,7 @@ public class User {
 		Account account = new Account();
 		Message message = new Message();
 		Logout logout = new Logout();
-		Likes like = new Likes
-	        Message message1 = new Message;
+		Likes likes = new Likes();
 
 		boolean flag = false;
 		int x;
@@ -81,7 +79,7 @@ public class User {
 			account.setPassword();
 			if (account.verifyAccount(account.getUsername(),account.getPassword()) == true) {
 				username=account.getUsername();
-				System.out.println("Sign In Successfull");
+				System.out.println("Sign In Successful");
 				System.out.println("Hello " + username +". Have fun!" );
 				message.getMessage(username);
 			} else {
@@ -100,79 +98,35 @@ public class User {
 			} else if (action == 2) {
 				System.out.println("Type the number of the message you want to like: ");
 				y = input.nextInt();
-				SQL_statement = "SELECT TOP 1 message_id FROM Messages ORDER BY message_id DESC;";
-				try {
-					if (conn != null ) {
-						st = conn.createStatement();
-						rs = st.executeQuery(SQL_statement);// finds the last message in db
-						rs.first();
-						if (rs.getInt("message_id") >= y && y != 0) {
-							Scanner input = new Scanner(System.in);
-							System.out.println("type the number of the message you want to like");
-							int y = input.nextInt();
-							String likedname = likedUser(String username,int y);
-							System.out.println(username +"\t" +"liked a post of user" +"\t" +name +"(post" +"\t" +y +")");
-							like.updateLikes(String username, String likedname int y);
-							numoflikes = likeCounter(int y);
-							System.out.println("total likes of message"+"\t"+y+ "\t"+"are"+"\t"+numoflikes);
-						} else {
-							System.out.println("ERROR!! We cannot find the message you want to like.");
-						}
-					}
-					st.close();
-					rs.close();
-				} catch (SQLException e) {
-					System.out.println("SQL statement exception" + e);
+				if (message.findLastMessage(y) == true) {
+					String likedname = likes.likedUser(username, y);
+					System.out.println(username + ": liked a post of user " + likedname + " (post " + y + ")");
+					likes.updateLikes(username, likedname, y);
+					int numoflikes = likes.likeCounter(y);
+					System.out.println("total likes of message " + y + " are " + numoflikes);
+				} else {
+					System.out.println("ERROR!! We cannot find the message you want to like:");
 				}
-				System.out.println();
 			} else if (action == 3) {
 				System.out.println("Type the number of the message you want to dislike: ");
 				y = input.nextInt();
-				SQL_statement = "SELECT TOP 1 message_id FROM Messages ORDER BY message_id DESC;";
-				try {
-					if (conn != null ) {
-						st = conn.createStatement();
-						rs = st.executeQuery(SQL_statement);// finds the last message in db
-						rs.first();
-						if (rs.getInt("message_id") <= y &&  y != 0) {
-							Scanner input = new Scanner(System.in);
-							System.out.println("type the number of the message you want to like");
-							int y = input.nextInt();
-							String likedname = likedUser(String username,int y);
-							System.out.println(username +"\t" +"liked a post of user" +"\t" +name +"(post" +"\t" +y +")");
-							like.updateLikes(String username, String likedname int y);
-							numoflikes = likeCounter(int y);
-							System.out.println("total likes of message"+"\t"+y+ "\t"+"are"+"\t"+numoflikes);
-						} else {
-							System.out.println("ERROR!! We cannot find the message you want to dislike.");
-						}
-					}
-					st.close();
-					rs.close();
-				} catch (SQLException e) {
-					System.out.println("SQL statement exception" + e);
+				if (message.findLastMessage(y) == true) {
+					String likedname = likes.likedUser(username,y);
+					System.out.println(username + " liked a post of user " + likedname + " (post " + y + ")");
+					likes.updateLikes(username, likedname, y);
+					int numoflikes = likes. likeCounter(y);
+					System.out.println("total likes of message " + y + " are" + numoflikes);
+				} else {
+					System.out.println("ERROR!! We cannot find the message you want to dislike:");
 				}
-				System.out.println();
 			} else if (action==4) {
 				System.out.print("Type the number of the message you want to reply to: ");
 				y = input.nextInt();
-				SQL_statement = "SELECT TOP 1 message_id FROM Messages ORDER BY message_id DESC;";
-				try {
-					if (conn != null ) {
-						st = conn.createStatement();
-						rs = st.executeQuery(SQL_statement);// finds the last message in db
-						rs.first();
-						if (rs.getInt("message_id") >= y && y != 0) {
-							answer = message.printMessage();
-							System.out.println(message.reply(username, answer, y));
-						} else {
-							System.out.println("ERROR!! We cannot find the message you want to reply to.");
-						}
-					}
-					st.close();
-					rs.close();
-				} catch (SQLException e) {
-					System.out.println("SQL statement exception" + e);
+				answer = message.printMessage();
+				if (message.findLastMessage(y) == true) {
+					message.reply(username,answer,y);
+				} else {
+					System.out.println("ERROR!! We cannot find the message you want to reply to:");
 				}
 			} else if (action == 6 ) {
 				System.out.println("\n\n\n\n\n\n\n\n\n\n");
@@ -197,26 +151,21 @@ public class User {
 		try {
 			st = conn.createStatement();
 			rs = st.executeQuery(SQL_statement);
-			int count = 0;
-			if (rs.next()) {
-				count++;
-			}
-			int lastMssg = count;// finds the number of the last message in db
-			rs.close();
-			st.close();
+			int lastMssg = 0;
+			while (rs.next()) {
+				lastMssg++;
+			}// finds the number of the last message in db
 			SQL_statement = "INSERT INTO Logout(username, lastmessageseen) VALUES( '" + username + " ' , " + lastMssg + ");";
 			try {
 				st = conn.createStatement();
 				st.executeUpdate(SQL_statement); // inserts in table logout the number of this last message
-				st.close();
-				conn.close();
 			} catch (SQLException e) {
 				System.out.println("SQL statement exception" + e);
 			}
-
+			rs.close();
+			st.close();
 		} catch (SQLException e) {
 			System.out.println("SQL statement exception" + e);
-
 		}
 	}
 
