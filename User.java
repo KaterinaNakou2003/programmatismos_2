@@ -111,7 +111,7 @@ public class User {
 							st = conn.createStatement();
 							rs = st.executeQuery(SQL_statement);
 							rs.first();
-							String answer = rs.getString("message_body");
+							answer = rs.getString("message_body");
 							st.close();
 							rs.close();
 							conn.close();
