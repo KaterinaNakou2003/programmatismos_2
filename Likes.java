@@ -33,7 +33,7 @@ public class Likes {
 
 	public int likeCounter(int y){
 		connectDB();
-    	SQL_statement =" SELECT COUNT(*) FROM Likes WHERE message_id=y;";
+    	SQL_statement =" SELECT COUNT(*) FROM Likes WHERE message_id="+y+";";
     	try {
 			if (conn != null ){
 				st = conn.createStatement();
