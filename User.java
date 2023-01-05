@@ -115,11 +115,11 @@ public class User {
 							st.close();
 							rs.close();
 							conn.close();
+							message1.updateMessages(username,answer,type);
 						}
 					}catch (SQLException e) {
 						System.out.println("SQL statement exception" + e)
 					}
-					message1.updateMessages(username,answer,type);
 				} else {
 					System.out.println("ERROR!! We cannot find the message you want to like:");
 				}
