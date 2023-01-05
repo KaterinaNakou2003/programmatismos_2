@@ -11,7 +11,7 @@ public class Likes {
 	ResultSet rs = null;
     String SQL_statement = null;
 
-	public String likedUser(String username,int y){
+	public String likedUser(int y){
 		connectDB();
 		SQL_statement = "SELECT sender FROM Messages WHERE message_id = y;";
 		try {
@@ -25,7 +25,7 @@ public class Likes {
 				return lkduser;
 			}
 		}catch (SQLException e){
-				System.out.println("SQL statement exception" + e)
+				System.out.println("SQL statement exception" + e);
 		}
 	}
 
@@ -51,7 +51,7 @@ public class Likes {
 
 
 
-	public void updateLikes(String username, String likedname int y) {
+	public void updateLikes(String username, String likedname, int y) {
 		connectDB();
 		SQL_statement = "INSERT INTO Likes(message_id,liked_user,liker) VALUES('"+y+"','"+likedname+"','"+username+"');";
 		try {
