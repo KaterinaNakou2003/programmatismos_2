@@ -111,7 +111,7 @@ public class Message {
 								System.out.println("You're now ready... Have fun!");
 								st.close();
 								rs.close();
-							} else if (result == 0) {
+							} else {
 								System.out.print("Oops!! We run into an error while loading your new messages...");
 							}
 
