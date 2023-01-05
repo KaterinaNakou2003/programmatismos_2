@@ -13,7 +13,7 @@ public class Likes {
 
 	public String likedUser(int y){
 		connectDB();
-		SQL_statement = "SELECT sender FROM Messages WHERE message_id = y;";
+		SQL_statement = "SELECT sender FROM Messages WHERE message_id = "+y+";";
 		try {
 			if (conn != null ) {
 				st = conn.createStatement();
