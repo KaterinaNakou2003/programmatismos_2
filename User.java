@@ -99,11 +99,27 @@ public class User {
 				System.out.println("Type the number of the message you want to like: ");
 				y = input.nextInt();
 				if (message.findLastMessage(y) == true) {
-					String likedname = likes.likedUser(username, y);
+					String likedname = likes.likedUser(y);
 					System.out.println(username + ": liked a post of user " + likedname + " (post " + y + ")");
 					likes.updateLikes(username, likedname, y);
 					int numoflikes = likes.likeCounter(y);
 					System.out.println("total likes of message " + y + " are " + numoflikes);
+					int type = -1;
+		         		SQL_statement = "SELECT message_body FROM Messages WHERE message_id = " + numberOfMessage;
+					try {
+						if (conn != null ){
+							st = conn.createStatement();
+							rs = st.executeQuery(SQL_statement);
+							rs.first();
+							String answer = rs.getString("message_body");
+							st.close();
+							rs.close();
+							conn.close();
+						}
+					}catch (SQLException e) {
+						System.out.println("SQL statement exception" + e)
+					}
+					message1.updateMessages(username,answer,type);
 				} else {
 					System.out.println("ERROR!! We cannot find the message you want to like:");
 				}
