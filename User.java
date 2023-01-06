@@ -89,7 +89,7 @@ public class User {
 		}
 
 		int action = 0, y,type,numberOfMessage;
-		String answer;
+		String answer,messagebody;
 		System.out.print( "\n What do you want to do: \n 1.Send a message \n 2.Like a message \n 3.Dislike a message \n 4.Reply to message \n 5.Logout \n 6.Instructions \n");
 
 		while (action != 5 || flag != true) {
@@ -101,7 +101,7 @@ public class User {
 				y = input.nextInt();
 				if (message.findLastMessage(y) == true) {
 					String likedname = likes.likedUser(y);
-					String messagebody = likes.messageBody(y);
+					messagebody = likes.messageBody(y);
 					if(likedname != "null" && messagebody != "null" ){
 						int numoflikes = likes.likeCounter(y);
 						if(numoflikes != -1){
@@ -139,7 +139,7 @@ public class User {
 				y = input.nextInt();
 				if (message.findLastMessage(y) == true) {
 					String dislikedname = dislikes.dislikedUser(y);
-					String messagebody = likes.messageBody(y);
+					messagebody = likes.messageBody(y);
 					if(dislikedname != "null" && messagebody != "null" ){
 						int numofdislikes = dislikes.dislikeCounter(y);
 						if(numofdislikes != -1){
