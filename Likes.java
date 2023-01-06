@@ -26,7 +26,9 @@ public class Likes {
 			}
 		}catch (SQLException e){
 				System.out.println("SQL statement exception" + e);
+				return "null";
 		}
+			return "null";
 	}
 
 
@@ -46,7 +48,9 @@ public class Likes {
 	        }
 		}catch (SQLException e) {
 			System.out.println("SQL statement exception" + e);
+			return -1;
 		}
+		return -1;
 	}
 
 
