@@ -116,7 +116,7 @@ public class User {
 							st.close();
 							rs.close();
 							conn.close();
-							message1.updateMessages(username,answer,type);
+							message.updateMessages(username,answer,type);
 						}
 					}catch (SQLException e) {
 						System.out.println("SQL statement exception" + e)
@@ -128,11 +128,27 @@ public class User {
 				System.out.println("Type the number of the message you want to dislike: ");
 				y = input.nextInt();
 				if (message.findLastMessage(y) == true) {
-					String likedname = likes.likedUser(username,y);
-					System.out.println(username + " liked a post of user " + likedname + " (post " + y + ")");
-					likes.updateLikes(username, likedname, y);
-					int numoflikes = likes. likeCounter(y);
-					System.out.println("total likes of message " + y + " are" + numoflikes);
+					String dislikedname = dislikes.dislikedUser(y);
+					System.out.println(username +"\t" +"disliked a post of user" +"\t" +name +"(post" +"\t" +y +")");
+					dislikes.updateDislikes(username,dislikedname,y);
+					int numofdislikes = dislikes.dislikeCounter(y);
+					System.out.println("total dislikes of message"+"\t"+y+ "\t"+"are"+"\t"+numofdislikes);
+					type = -2;
+					SQL_statement = "SELECT message_body FROM Messages WHERE message_id = " + numberOfMessage;
+					try {
+						if (conn != null ){
+							st = conn.createStatement();
+							rs = st.executeQuery(SQL_statement);
+							rs.first();
+							String answer = rs.getString("message_body");
+							st.close();
+							rs.close();
+							conn.close();
+							message.updateMessages(username,answer,type);
+						}
+	   				 }catch (SQLException e) {
+						System.out.println("SQL statement exception" + e)
+					}
 				} else {
 					System.out.println("ERROR!! We cannot find the message you want to dislike:");
 				}
