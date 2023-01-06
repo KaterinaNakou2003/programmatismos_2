@@ -101,10 +101,20 @@ public class User {
 				y = input.nextInt();
 				if (message.findLastMessage(y) == true) {
 					String likedname = likes.likedUser(y);
-					System.out.println(username + ": liked a post of user " + likedname + " (post " + y + ")");
-					likes.updateLikes(username, likedname, y);
-					int numoflikes = likes.likeCounter(y);
-					System.out.println("total likes of message " + y + " are " + numoflikes);
+					String messagebody = likes.messageBody(y);
+					if(likedname != "null" && messagebody != "null" ){
+						int numoflikes = likes.likeCounter(y);
+						if(numoflikes != -1){
+							numoflikes++;
+							System.out.println(username +"\t"+"liked a post of user" +"\t"+ likedname +"(post:'"+messagebody +"'" +")");
+							System.out.println("total likes of message:'"+messagebody+"'"+"are"+numoflikes);
+							likes.updateLikes(username,likedname,y);
+						}else{
+							System.out.println("There was an error while trying to apply your like");
+						}
+					}else{
+						System.out.println("There was an error while trying to apply your like");
+					}
 					type = -1;
 		         		SQL_statement = "SELECT message_body FROM Messages WHERE message_id = " + numberOfMessage;
 					try {
