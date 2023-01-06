@@ -139,10 +139,20 @@ public class User {
 				y = input.nextInt();
 				if (message.findLastMessage(y) == true) {
 					String dislikedname = dislikes.dislikedUser(y);
-					System.out.println(username +"\t" +"disliked a post of user" +"\t" +name +"(post" +"\t" +y +")");
-					dislikes.updateDislikes(username,dislikedname,y);
-					int numofdislikes = dislikes.dislikeCounter(y);
-					System.out.println("total dislikes of message"+"\t"+y+ "\t"+"are"+"\t"+numofdislikes);
+					String messagebody = likes.messageBody(y);
+					if(dislikedname != "null" && messagebody != "null" ){
+						int numofdislikes = dislikes.dislikeCounter(y);
+						if(numofdislikes != -1){
+							numofidislikes++;
+							System.out.println(username +"\t"+"disliked a post of user" +"\t"+ dislikedname +"(post:'"+messagebody +"'" +")");
+							System.out.println("total dislikes of message:'"+messagebody+"'"+"are"+numofdislikes);
+							dislikes.updateDislikes(username,dislikedname,y);
+						}else{
+							System.out.println("There was an error while trying to apply your dislike");
+						}
+					}else{
+						System.out.println("There was an error while trying to apply your dislike");
+					}
 					type = -2;
 					SQL_statement = "SELECT message_body FROM Messages WHERE message_id = " + numberOfMessage;
 					try {
