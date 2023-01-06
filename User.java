@@ -30,6 +30,7 @@ public class User {
 		Message message = new Message();
 		Logout logout = new Logout();
 		Likes likes = new Likes();
+		Dislikes dislikes = new Dislikes();
 
 		boolean flag = false;
 		int x;
@@ -87,7 +88,7 @@ public class User {
 			}
 		}
 
-		int action = 0, y,numberOfMessage;
+		int action = 0, y,type,numberOfMessage;
 		String answer;
 		System.out.print( "\n What do you want to do: \n 1.Send a message \n 2.Like a message \n 3.Dislike a message \n 4.Reply to message \n 5.Logout \n 6.Instructions \n");
 
@@ -104,7 +105,7 @@ public class User {
 					likes.updateLikes(username, likedname, y);
 					int numoflikes = likes.likeCounter(y);
 					System.out.println("total likes of message " + y + " are " + numoflikes);
-					int type = -1;
+					type = -1;
 		         		SQL_statement = "SELECT message_body FROM Messages WHERE message_id = " + numberOfMessage;
 					try {
 						if (conn != null ){
