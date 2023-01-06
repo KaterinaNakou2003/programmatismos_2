@@ -9,10 +9,10 @@ public class Dislikes {
 		Statement st = null;
 		ResultSet rs = null;
 	    String SQL_statement = null;
-	
+
 		public String dislikedUser(int y){
 			connectDB();
-			SQL_statement = "SELECT sender FROM Messages WHERE message_id = "+y+";";
+			SQL_statement = "SELECT sender, FROM Messages WHERE message_id = "+y+";";
 			try {
 				if (conn != null ) {
 					st = conn.createStatement();
@@ -25,11 +25,35 @@ public class Dislikes {
 				}
 			}catch (SQLException e){
 					System.out.println("SQL statement exception" + e);
+					return "null";
 			}
+			return "null";
 		}
-	
-	
-	
+
+
+		public String messageBody(int y){
+			connectDB();
+			SQL_statement = "SELECT message_body, FROM Messages WHERE message_id = "+y+";";
+			try {
+				if (conn != null ) {
+					st = conn.createStatement();
+					rs = st.executeQuery(SQL_statement);
+					String msgbody = rs.getString("message_body");
+					st.close();
+					rs.close();
+					conn.close();
+					return msgbody;
+				}
+			}catch (SQLException e){
+					System.out.println("SQL statement exception" + e);
+					return "null";
+			}
+			return "null";
+		}
+
+
+
+
 		public int dislikeCounter(int y){
 			connectDB();
 	    	SQL_statement =" SELECT COUNT(*) FROM Dislikes WHERE message_id="+y+";";
@@ -45,11 +69,13 @@ public class Dislikes {
 		        }
 			}catch (SQLException e) {
 				System.out.println("SQL statement exception" + e);
+				return -1;
 			}
+			return -1;
 		}
-	
-	
-	
+
+
+
 		public void updateDislikes(String username, String dislikedname, int y) {
 			connectDB();
 			SQL_statement = "INSERT INTO Dislikes(message_id,disliked_user,disliker) VALUES('"+y+"','"+dislikedname+"','"+username+"');";
@@ -64,8 +90,8 @@ public class Dislikes {
 				System.out.println("SQL statement exception" + e);
 			}
 		}
-	
-	
+
+
 		public void connectDB(){
 			try {
 				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -76,7 +102,7 @@ public class Dislikes {
 						System.err.println("Connection failed");
 			}
 		}
-	
-	
-	
+
+
+
 }
