@@ -30,6 +30,28 @@ public class Likes {
 		}
 			return "null";
 	}
+	
+	
+	
+	public String messageBody(int y){
+		connectDB();
+		SQL_statement = "SELECT message_body, FROM Messages WHERE message_id = "+y+";";
+		try {
+			if (conn != null ) {
+				st = conn.createStatement();
+				rs = st.executeQuery(SQL_statement);
+				String msgbody = rs.getString("message_body");
+				st.close();
+				rs.close();
+				conn.close();
+				return msgbody;
+				}
+		}catch (SQLException e){
+				System.out.println("SQL statement exception" + e);
+				return "null";
+		}
+		return "null";
+	}
 
 
 
