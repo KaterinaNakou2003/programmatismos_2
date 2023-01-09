@@ -10,82 +10,80 @@ public class Likes {
 	Statement st = null;
 	ResultSet rs = null;
     String SQL_statement = null;
+    Message message;
 
-	public String likedUser(int y){
+	public String likedUser(int y) {
 		connectDB();
-		SQL_statement = "SELECT sender FROM Messages WHERE message_id = "+y+";";
+		String lkduser = null;
+		y =+ 1002;
+		SQL_statement = "SELECT sender FROM Messages WHERE message_id = " + y + ";";
 		try {
 			if (conn != null ) {
 				st = conn.createStatement();
 				rs = st.executeQuery(SQL_statement);
-				String lkduser = rs.getString("sender");
+				lkduser = rs.getString("sender");
 				st.close();
 				rs.close();
-				conn.close();
-				return lkduser;
 			}
 		}catch (SQLException e){
 				System.out.println("SQL statement exception" + e);
-				return "null";
 		}
-			return "null";
+			return lkduser;
 	}
-	
-	
-	
-	public String messageBody(int y){
+
+
+
+	public String messageBody(int y) {
 		connectDB();
-		SQL_statement = "SELECT message_body, FROM Messages WHERE message_id = "+y+";";
+		String msgbody = null;
+		y =+ 1002;
+		SQL_statement = "SELECT message_body, FROM Messages WHERE message_id = " + y + ";";
 		try {
 			if (conn != null ) {
 				st = conn.createStatement();
 				rs = st.executeQuery(SQL_statement);
-				String msgbody = rs.getString("message_body");
+				msgbody = rs.getString("message_body");
 				st.close();
 				rs.close();
-				conn.close();
-				return msgbody;
 				}
-		}catch (SQLException e){
+		}catch (SQLException e) {
 				System.out.println("SQL statement exception" + e);
-				return "null";
 		}
-		return "null";
+		return msgbody;
 	}
 
 
 
-	public int likeCounter(int y){
+	public int likeCounter(int y) {
 		connectDB();
-    	SQL_statement =" SELECT COUNT(*) FROM Likes WHERE message_id="+y+";";
+		int d = -1;
+    	SQL_statement =" SELECT COUNT(*) FROM Likes WHERE message_id=" + y + ";";
     	try {
-			if (conn != null ){
+			if (conn != null ) {
 				st = conn.createStatement();
 				rs = st.executeQuery(SQL_statement);
-				int d = rs.getInt("COUNT");
+				d = rs.getInt("COUNT");
 				st.close();
 				rs.close();
-				conn.close();
-				return d;
 	        }
 		}catch (SQLException e) {
 			System.out.println("SQL statement exception" + e);
-			return -1;
 		}
-		return -1;
+		return d;
 	}
 
 
 
 	public void updateLikes(String username, String likedname, int y) {
 		connectDB();
-		SQL_statement = "INSERT INTO Likes(message_id,liked_user,liker) VALUES('"+y+"','"+likedname+"','"+username+"');";
+		SQL_statement = "INSERT INTO Likes(message_id,liked_user,liker) VALUES('" + y + "','" + likedname + "','" + username + "');";
 		try {
 			if (conn != null ) {
 				st = conn.createStatement();
 				st.executeUpdate(SQL_statement);
+				String answer = messageBody(y);
+				message.updateMessages(username,answer,-1);
 				st.close();
-				conn.close();
 			}
 		} catch (SQLException e) {
 			System.out.println("SQL statement exception" + e);
@@ -93,17 +91,16 @@ public class Likes {
 	}
 
 
-	public void connectDB(){
+	public void connectDB() {
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			Connection conn = DriverManager.getConnection(
 					"jdbc:sqlserver://DESKTOP-NVDOEDC:1433;"
 					+ "DatabaseName=Codecom;encrypt=true;trustServerCertificate=true;", "Progr2", "programmatismos2");
-		} catch (SQLException e) {
+		} catch (Exception e) {
 					System.err.println("Connection failed");
 		}
 	}
-
 
 
 }
