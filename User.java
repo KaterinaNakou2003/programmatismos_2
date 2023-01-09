@@ -100,77 +100,46 @@ public class User {
 				System.out.println("Type the number of the message you want to like: ");
 				y = input.nextInt();
 				if (message.findLastMessage(y) == true) {
-					String likedname = likes.likedUser(y);
-					messagebody = likes.messageBody(y);
-					if(likedname != "null" && messagebody != "null" ){
-						int numoflikes = likes.likeCounter(y);
-						if(numoflikes != -1){
-							numoflikes++;
-							System.out.println(username +"\t"+"liked a post of user" +"\t"+ likedname +"(post:'"+messagebody +"'" +")");
-							System.out.println("total likes of message:'"+messagebody+"'"+"are"+numoflikes);
-							likes.updateLikes(username,likedname,y);
+					likedName = likes.likedUser(y);
+					messageBody = likes.messageBody(y);
+					if(likedName != null && messageBody != null ) {
+						int numOfLikes = likes.likeCounter(y);
+						if(numOfLikes != -1){
+							numOfLikes++;
+							System.out.println(username +"\t"+"liked a post of user" +"\t"+ likedName +"(post:'"+messageBody +"'" +")");
+							System.out.println("total likes of message: '"+messageBody + "'" + "are" + numOfLikes);
+							likes.updateLikes(username, likedName, y);
 						}else{
 							System.out.println("There was an error while trying to apply your like");
 						}
 					}else{
 						System.out.println("There was an error while trying to apply your like");
 					}
-					type = -1;
-		         		SQL_statement = "SELECT message_body FROM Messages WHERE message_id = " + numberOfMessage;
-					try {
-						if (conn != null ){
-							st = conn.createStatement();
-							rs = st.executeQuery(SQL_statement);
-							rs.first();
-							answer = rs.getString("message_body");
-							st.close();
-							rs.close();
-							conn.close();
-							message.updateMessages(username,answer,type);
-						}
-					}catch (SQLException e) {
-						System.out.println("SQL statement exception" + e)
-					}
 				} else {
 					System.out.println("ERROR!! We cannot find the message you want to like:");
 				}
 			} else if (action == 3) {
-				System.out.println("Type the number of the message you want to dislike: ");
+				System.out.println("Type the number of the message you want to dislike. ");
 				y = input.nextInt();
 				if (message.findLastMessage(y) == true) {
-					String dislikedname = dislikes.dislikedUser(y);
-					messagebody = likes.messageBody(y);
-					if(dislikedname != "null" && messagebody != "null" ){
-						int numofdislikes = dislikes.dislikeCounter(y);
-						if(numofdislikes != -1){
-							numofidislikes++;
-							System.out.println(username +"\t"+"disliked a post of user" +"\t"+ dislikedname +"(post:'"+messagebody +"'" +")");
-							System.out.println("total dislikes of message:'"+messagebody+"'"+"are"+numofdislikes);
-							dislikes.updateDislikes(username,dislikedname,y);
+					dislikedName = dislikes.dislikedUser(y);
+					messageBody = likes.messageBody(y);
+					if(dislikedName != null && messageBody != null ) {
+						int numOfDislikes = dislikes.dislikeCounter(y);
+						if(numOfDislikes != -1) {
+							numOfDislikes++;
+							System.out.println(username + "\t" + "disliked a post of user" + "\t" + dislikedName + "(post:'" + messageBody + "'" + ")");
+							System.out.println("total dislikes of message:'" + messageBody + "'" + "are" + numOfDislikes);
+							dislikes.updateDislikes(username,dislikedName,y);
 						}else{
 							System.out.println("There was an error while trying to apply your dislike");
 						}
 					}else{
 						System.out.println("There was an error while trying to apply your dislike");
 					}
-					type = -2;
-					SQL_statement = "SELECT message_body FROM Messages WHERE message_id = " + numberOfMessage;
-					try {
-						if (conn != null ){
-							st = conn.createStatement();
-							rs = st.executeQuery(SQL_statement);
-							rs.first();
-							String answer = rs.getString("message_body");
-							st.close();
-							rs.close();
-							conn.close();
-							message.updateMessages(username,answer,type);
-						}
-	   				 }catch (SQLException e) {
-						System.out.println("SQL statement exception" + e)
-					}
+
 				} else {
-					System.out.println("ERROR!! We cannot find the message you want to dislike:");
+					System.out.println("ERROR!! We cannot find the message you want to dislike.");
 				}
 			} else if (action==4) {
 				System.out.print("Type the number of the message you want to reply to: ");
