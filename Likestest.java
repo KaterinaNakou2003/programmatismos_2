@@ -28,14 +28,15 @@ public class TestLikes {
     }
 
     @Test
-		public void testUpdateLikes() {
-			Likes like = new Likes();
-		    	String username = "Maria";
-			String likedname = "John";
-			int y = 1;
-			int expected = 4;
-			like.updateLikes(username, likedname, y);
-			int actual = like.likeCounter(1);
-			assertEquals(expected, actual);
-	}
+    public void testUpdateLikes() {
+    Likes like = new Likes();
+    String username = "Maria";
+    String likedname = "John";
+    int y = 1;
+    int expected = 4;
+    like.updateLikes(username, likedname, y);
+    int actual = like.likeCounter(1);
+    assertEquals(expected, actual);
+    }
+	
 }
