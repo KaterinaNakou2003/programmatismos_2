@@ -88,8 +88,8 @@ public class User {
 			}
 		}
 
-		int action = 0, y,type,numberOfMessage;
-		String answer,messagebody;
+		int action = 0, y;
+		String answer, likedName, dislikedName, messageBody;
 		System.out.print( "\n What do you want to do: \n 1.Send a message \n 2.Like a message \n 3.Dislike a message \n 4.Reply to message \n 5.Logout \n 6.Instructions \n");
 
 		while (action != 5 || flag != true) {
