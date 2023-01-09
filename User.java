@@ -123,7 +123,7 @@ public class User {
 				y = input.nextInt();
 				if (message.findLastMessage(y) == true) {
 					dislikedName = dislikes.dislikedUser(y);
-					messageBody = likes.messageBody(y);
+					messageBody = dislikes.messageBody(y);
 					if(dislikedName != null && messageBody != null ) {
 						int numOfDislikes = dislikes.dislikeCounter(y);
 						if(numOfDislikes != -1) {
