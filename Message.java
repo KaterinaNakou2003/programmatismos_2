@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class Message {
 
-		Connection conn = null;
+	Connection conn = null;
     Statement st = null;
     ResultSet rs = null;
     String SQL_statement = null;
@@ -30,7 +30,7 @@ public class Message {
 		if ((conn != null ) && !answer.equals("exit")) {
 			getConnectionWithDB();
 			message = username + " : " + answer;
-			updateMessages( username, answer, 0);
+			updateMessages(username, answer, 0);
 		} else if((conn != null ) && answer.equals("exit")) {
 			message = "ACTION CANCELLED";
 		} else {
@@ -77,7 +77,7 @@ public class Message {
 						System.out.println("You have " + result
 						+ " new Messages \n Let's catch up!! ");
 						lastLogout = lastLogout - 1005;// logw bd
-						SQL_statement = "SELECT message_id, sender, message_body, typeofmessage"
+						SQL_statement = "SELECT message_id, sender, message_body, typeofmessage "
 							+ "FROM Messages WHERE message_id>=" + lastLogout + ";";
 						try {
 							Statement sta = conn.createStatement();
@@ -160,15 +160,14 @@ public class Message {
 			getConnectionWithDB();
 			numberOfMessage = numberOfMessage + 1002;
 			updateMessages(username, answer, numberOfMessage);
-			//prints message to user
 			SQL_statement = "SELECT message_body,sender FROM Messages WHERE message_id = "
 				+ numberOfMessage;
 			try {
 				if (conn != null ) {
 					st = conn.createStatement();
 					rs = st.executeQuery(SQL_statement);
-					while(rs.next()) {
-						message = username + " replied to "
+					while (rs.next()) {
+						message = username + " replied to " 
 							+ rs.getString("message_body") + " : " + answer ;
 					}
 					st.close();
@@ -176,7 +175,6 @@ public class Message {
 				} else {
 					message = "Not Connected!";
 				}
-
 			} catch (SQLException e) {
 				message = "SQL statement exception" + e;
 			}
@@ -195,8 +193,8 @@ public class Message {
 
    public void updateMessages(String username, String answer, int type) {
 	   getConnectionWithDB();
-		SQL_statement = "INSERT INTO Messages(sender,message_body,typeofmessage) VALUES ( '"
-			+ username + " ' , '" + answer + " ' , " + type + ")";
+		SQL_statement = "INSERT INTO Messages(sender,message_body,typeofmessage) " 
+			+ "VALUES ( '" + username + " ' , '" + answer + " ' , " + type + ")";
 		try {
 			if (conn != null ) {
 				st = conn.createStatement();
@@ -224,16 +222,14 @@ public class Message {
 					lastMssg = rs.getInt("message_id");
 				}
 				if (lastMssg >= 1002 + y && y != 1002) {
-					flag =true;
+					flag = true;
 				}
-				st.close();
-				rs.close();
 			}
-
+			st.close();
+			rs.close();
 		} catch (SQLException e) {
 			System.out.println("SQL statement exception" + e);
 		}
 		return flag;
    }
-
 }//telos message
