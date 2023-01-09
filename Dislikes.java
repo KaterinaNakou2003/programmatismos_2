@@ -32,28 +32,6 @@ public class Dislikes {
 		}
 
 
-		public String messageBody(int y) {
-			connectDB();
-			String msgbody = null;
-			y =+ 1002;
-			SQL_statement = "SELECT message_body FROM Messages WHERE message_id = " + y + ";";
-			try {
-				if (conn != null ) {
-					st = conn.createStatement();
-					rs = st.executeQuery(SQL_statement);
-					msgbody = rs.getString("message_body");
-					st.close();
-					rs.close();
-				}
-			}catch (SQLException e) {
-					System.out.println("SQL statement exception" + e);
-			}
-			return msgbody;
-		}
-
-
-
-
 		public int dislikeCounter(int y) {
 			connectDB();
 			int d = -1;
