@@ -17,9 +17,11 @@ public class Account {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter your username:");
         this.username = input.nextLine();
-        if(username.length()>20)
+        while(username.length()>20) {
         System.out.println("Your username should contain only 20 characters ");
-        setUsername();
+        this.username = input.nextLine();
+        }
+
         
     }
     //o xrhsths eisagei ton kwdiko tou
@@ -27,9 +29,11 @@ public class Account {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter your password:");
             this.password= input.nextLine();
-            if(password.length()>15)
+
+            while (password.length()>15) {
             System.out.println("Your password should contain only 15 characters ");
-            setPassword();
+            this.password= input.nextLine();
+            }
     }
     // epistefei to username 
     public String getUsername() {
@@ -89,19 +93,30 @@ sth bash yparxon logariasmo) kai elegxei na mhn eisax8ei sth bash kapoio hdh ypa
         return result;
     }
 //ginetai eisodos efoson yparxei aytos o logariasmos
-    public void verifyAccount(String username,String password) {
-        
+
+    public boolean verifyAccount(String username,String password) {
         ResultSet rs=null;
+        boolean checkAccount = false;
+
         try {
          findAccount.setString(1, username);
          findAccount.setString(2, password);   
             rs=findAccount.executeQuery();
-            int count=0;
 
-    while(rs.next()) {
-        count = count + 1;
+           // int count=0;
+
+    if(rs.next()) {
+        //count = count + 1;
+        checkAccount=true;
     }
-    if (count==1) {
+} catch (SQLException sqlException) {
+    System.out.println(sqlException);
+    close();
+}
+return checkAccount;
+    }
+    /*if (count==1) {
+
         String ur=getUsername(); 
         System.out.println("Sign In Successfull");
         System.out.println("Hello " + ur);
@@ -122,7 +137,9 @@ sth bash yparxon logariasmo) kai elegxei na mhn eisax8ei sth bash kapoio hdh ypa
     }
 }
 
-        }
+
+        }*/
+
     
 
         public void close() {
