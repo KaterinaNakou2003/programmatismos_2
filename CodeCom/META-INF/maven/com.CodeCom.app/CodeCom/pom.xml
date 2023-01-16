@@ -91,40 +91,29 @@
 	    </dependency>
 	  </dependencies>
 	</plugin>
-	<plugin>
-	                <groupId>org.apache.maven.plugins</groupId>
-	                <artifactId>maven-checkstyle-plugin</artifactId>
-	                <version>${checkstyle-maven-plugin.version}</version>
-	                <configuration>
-	                    <dependency>
-	                        <groupId>com.puppycrawl.tools</groupId>
-	                        <artifactId>checkstyle</artifactId>
-	                        <version>${checkstyle.version}</version>
-	                    </dependency>
-	                  <configLocation>checkstyle.xml</configLocation>
-	                </configuration>
-	                <executions>
-	                    <execution>
-	                        <phase>validate</phase>
-	                        <goals>
-	                            <goal>check</goal>
-	                        </goals>
-	                    </execution>
-	                </executions>
-            </plugin>
       </plugins>
     </pluginManagement>
   </build>
   <reporting>
-          <plugins>
-              <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-checkstyle-plugin</artifactId>
-                  <version>${checkstyle-maven-plugin.version}</version>
-                  <configuration>
-                      <configLocation>checkstyle.xml</configLocation>
-                  </configuration>
-              </plugin>
-          </plugins>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>3.2.0</version>
+            <reportSets>
+              <reportSet>
+                <reports>
+                  <report>checkstyle</report>
+                </reports>
+              </reportSet>
+            </reportSets>
+          </plugin>
+        </plugins>
     </reporting>
+    <repositories>
+        <repository>
+          <id>CodeCom</id>
+          <url>jdbc:sqlserver://DESKTOP-NVDOEDC:1433;</url>
+        </repository>
+</repositories>
   </project>
