@@ -72,7 +72,7 @@
 #### CodeCom: δομές δεδομένων και αλγορίθμοι 
 Η CodeCom χρησιμοποίει την εφαρμογή MS sqlserver για την αποθήκευση των δεδομένων της σε κατάλληλη βάση.
 Η βάση περιέχει τους πινακες:  
-1.Messages(message_id, typeofmessage) ....
-2.Likes
-3.Logout()
+1.   Messages(message_id, typeofmessage) ....   
+2.   Likes   
+3.   Logout()  
 
