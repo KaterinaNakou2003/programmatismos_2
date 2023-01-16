@@ -1,6 +1,7 @@
-package com.CodeCom.app;
+package net.codejava.sql;
 
 import java.util.Scanner;
+
 public class Logout {
 
 	Scanner input = new Scanner(System.in);
@@ -26,10 +27,11 @@ public class Logout {
 			flag = false;
 		} else if (ans.equals("y") || ans.equals("Y")) {
 			flag = true;
+			System.out.println("Bye.. Hope you liked our app");
 		} else {
 			falseInput();
 		} //close if
 		return flag;
 	} // close falseInput
 
-} // close classs
+} // close class

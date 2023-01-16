@@ -1,4 +1,4 @@
-package com.CodeCom.app;
+package net.codejava.sql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,9 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 public class Account {
-    private String username,password;
+    private String username;
+    private String password;
     Connection conn;
     PreparedStatement insertnewAccount;
     PreparedStatement findAccount;
@@ -49,6 +51,7 @@ public class Account {
 sth bash yparxon logariasmo) kai elegxei na mhn eisax8ei sth bash kapoio hdh yparxon logariasmos */
     public Account() {
         try {
+        	Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             conn = DriverManager.getConnection(
                 "jdbc:sqlserver://DESKTOP-NVDOEDC:1433;"
                 + "DatabaseName=Codecom;encrypt=true;trustServerCertificate=true;", "Progr2", "programmatismos2");
@@ -56,10 +59,9 @@ sth bash yparxon logariasmo) kai elegxei na mhn eisax8ei sth bash kapoio hdh ypa
                 checkUsername=conn.prepareStatement("Select * from Users where username=?");
                 insertnewAccount = conn.prepareStatement("Insert into Users" + "(username,password)" + "values (?,?)");
                 findAccount = conn.prepareStatement("Select username,password from Users where username=? and password=?");
-            } catch (SQLException sqlException) {
-                sqlException.printStackTrace();
-                System.exit(1);
-            }
+            } catch (Exception e) {
+                e.printStackTrace();
+			}
     }
 //elegxos gia na mhn yparxei idio username kai ara logariasmos    
     public boolean checkUsername(String Username) {
@@ -132,6 +134,7 @@ return checkAccount;
         close();
     }
 }
+
         }*/
     
 
@@ -144,6 +147,4 @@ return checkAccount;
                 sqlException.printStackTrace();
             }
         }
-
-
 }

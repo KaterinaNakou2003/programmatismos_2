@@ -2,5 +2,5 @@ Manifest-Version: 1.0
 Built-By: user
 Created-By: Apache Maven 3.8.6
 Build-Jdk: 1.8.0_341
-Main-Class: com.CodeCom.app.App
+Main-Class: com.CodeCom.app.User
 

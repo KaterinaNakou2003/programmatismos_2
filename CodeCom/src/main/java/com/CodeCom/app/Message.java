@@ -1,4 +1,4 @@
-package com.CodeCom.app;
+package net.codejava.sql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.Scanner;
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 public class Message {
 
@@ -48,7 +49,8 @@ public class Message {
 		try {
 			if (conn != null ) {
 				st = conn.createStatement();
-				rs = st.executeQuery(SQL_statement);// finds the number of the last message in db
+				rs = st.executeQuery(SQL_statement);
+				// finds the number of the last message in db
 				int lastMssg = 1002;
 				if (rs.next()) {
 					lastMssg = rs.getInt("message_id");
@@ -57,28 +59,29 @@ public class Message {
 					}
 				}
 				//find last logout of user
-				SQL_statement = "SELECT logout_id FROM Logout WHERE username =" + "'"+ user +"'";
+				SQL_statement = "SELECT lastmessageseen FROM Logout WHERE username =" 
+						+ "'"+ user +"'";
 				try {
 					Statement st1 = conn.createStatement();
 					ResultSet rs1 = st1.executeQuery(SQL_statement);
-					int lastLogout = 2007;
-					if (rs1.next()) {
-						lastLogout = rs1.getInt("logout_id");
-						while (rs1.next()) {
-							lastLogout = rs1.getInt("logout_id");
-						}
+					int lastLogout = 1002;
+					boolean y = rs1.next();
+					while (y == true) {
+						lastLogout = rs1.getInt("lastmessageseen");
+						y = rs1.next();
 					}
-					int result = lastMssg - (lastLogout - 1005); // logw db
+					int result = lastMssg - lastLogout; // logw db
 					if (result == 0) {
 						System.out.println("You have no new Messages");
-					} else if (result > 0 && lastLogout == 2007) {// logw db
+					} else if (result > 0 && lastLogout == 1002) {// logw db
 						System.out.println("You have no new Messages");
 					} else if (result > 0) {
 						System.out.println("You have " + result
-						+ " new Messages \n Let's catch up!! ");
-						lastLogout = lastLogout - 1005;// logw bd
-						SQL_statement = "SELECT message_id, sender, message_body, typeofmessage "
-							+ "FROM Messages WHERE message_id>=" + lastLogout + ";";
+								+ " new Messages \n Let's catch up!! ");
+						SQL_statement = "SELECT message_id, sender,"
+								+ " message_body, typeofmessage "
+								+ "FROM Messages WHERE message_id>="
+								+ lastLogout + ";";
 						try {
 							Statement sta = conn.createStatement();
 							ResultSet rsa = sta.executeQuery(SQL_statement);
@@ -89,9 +92,6 @@ public class Message {
 									} else if (rsa.getInt("typeofmessage") == -1) {
 										//otan kanei like sth message tha mpainei -1
 										System.out.println(rsa.getString("sender") + " liked : " + rsa.getString("message_body"));
-									} else if (rsa.getInt("typeofmessage") == -2) {
-										//otan kanei dislike sth message tha mpainei -2
-										System.out.println(rsa.getString("sender") + " disliked : " + rsa.getString("message_body"));
 									} else {
 										SQL_statement = "SELECT message_body,sender,typeofmessage "
 											+ "FROM Messages WHERE message_id = " + rsa.getInt("message_id");
@@ -167,7 +167,7 @@ public class Message {
 					st = conn.createStatement();
 					rs = st.executeQuery(SQL_statement);
 					while (rs.next()) {
-						message = username + " replied to "
+						message = username + " replied to " 
 							+ rs.getString("message_body") + " : " + answer ;
 					}
 					st.close();
@@ -193,7 +193,7 @@ public class Message {
 
    public void updateMessages(String username, String answer, int type) {
 	   getConnectionWithDB();
-		SQL_statement = "INSERT INTO Messages(sender,message_body,typeofmessage) "
+		SQL_statement = "INSERT INTO Messages(sender,message_body,typeofmessage) " 
 			+ "VALUES ( '" + username + " ' , '" + answer + " ' , " + type + ")";
 		try {
 			if (conn != null ) {
@@ -231,5 +231,30 @@ public class Message {
 			System.out.println("SQL statement exception" + e);
 		}
 		return flag;
+   }
+   
+   public void showMessages() {
+	   getConnectionWithDB();
+	   SQL_statement = "SELECT message_id, message_body, typeofmessage"
+	   		+ " FROM Messages;";
+	   try {
+		   st = conn.createStatement();
+		   rs = st.executeQuery(SQL_statement);
+		   boolean y = rs.next();
+		   int mssgid;
+		   String mssgbody;
+		   while (y == true) {
+			   if (rs.getInt("typeofmessage") != -1) {
+				   	mssgid = rs.getInt("message_id");
+				   	mssgid = mssgid - 1002;
+				   	mssgbody = rs.getString("message_body");
+				   	System.out.println(mssgid + " : " + mssgbody);
+			   }
+			   y = rs.next();
+		   }
+	   	} catch (SQLException e) {
+			System.out.println("SQL statement exception" + e);
+		}
+	   
    }
 }//telos message
