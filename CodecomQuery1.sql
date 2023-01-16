@@ -5,13 +5,8 @@ create table Users
 create table Messages
 			(message_id int not null identity(1,1) primary key,
 			sender varchar(20) not null foreign key references Users(username) on delete cascade,
-			message_body varchar(200) not null);
-create table Replies
-			(reply_id int not null identity(1,1) primary key,
-			message_id int not null foreign key references Messages(message_id) on delete cascade,
-			replied_to varchar(20) not null foreign key references Users(username) on delete no action,
-			replier varchar(20) not null foreign key references Users(username) on delete no action,
-			reply_body varchar(100) not null);
+			message_body varchar(200) not null,
+			typeofmessage int not null);
 create table Likes
 			(like_id int not null identity(1,1) primary key,
 			message_id int not null foreign key references Messages(message_id) on delete cascade,
@@ -30,6 +25,17 @@ create table Logout
 drop table Logout;
 drop table Dislikes;
 drop table Likes;
-drop table Replies;
 drop table Messages;
 drop table Users;
+
+delete from Logout;
+delete from Messages;
+insert into Messages(message_id, sender, message_body, typeofmessage)
+values (1, 'lambriniarv', 'Hello', 0);
+update Messages
+set typeofmessage = 1008
+where message_id = 1005 or message_id = 1010;
+
+select message_id, sender, message_body, typeofmessage
+from Messages
+where message_id >= 1008;
