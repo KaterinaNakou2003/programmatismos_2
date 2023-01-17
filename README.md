@@ -89,7 +89,7 @@
     
 #### CodeCom: διάγραμμα UML   
 
- ![](C:\Users\kater\OneDrive\Pictures\Screenshots\2023-01-17 (2).png )
+ ![](2023-01-17 (2).png )
    
 
 #### CodeCom: δομές δεδομένων και αλγορίθμοι 
