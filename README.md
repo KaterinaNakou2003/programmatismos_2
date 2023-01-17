@@ -9,7 +9,7 @@
 
 #### CodeCom: οδηγίες χρήσης   
 Θες να γίνεις μέλος της κοινότητάς μας; Πάτα το 1.   
-Θες να συνεδεθείς; Πάτα το 1.  
+Θες να συνεδεθείς; Πάτα το 2.  
 Ποια λειτουργία θες να χρησιμοποιήσεις :  
 1.  Στείλε μήνυμα  
 2.  Κάνε like  σε ένα άλλο μήνυμα  
@@ -72,7 +72,8 @@
 #### CodeCom: δομές δεδομένων και αλγορίθμοι 
 Η CodeCom χρησιμοποίει την εφαρμογή MS sqlserver για την αποθήκευση των δεδομένων της σε κατάλληλη βάση.
 Η βάση περιέχει τους πινακες:  
-1.   Messages(message_id, typeofmessage) ....   
-2.   Likes   
-3.   Logout()  
+1.   Users(username, password)
+1.   Messages(message_id, sender, message_body, typeofmessage)
+2.   Likes(like_id, message_id, liked_user, liker)
+3.   Logout(logout_id, username, lastmessageseen)  
 
