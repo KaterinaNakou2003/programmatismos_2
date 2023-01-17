@@ -114,31 +114,8 @@ sth bash yparxon logariasmo) kai elegxei na mhn eisax8ei sth bash kapoio hdh ypa
 }
 return checkAccount;
     }
-    /*if (count==1) {
-        String ur=getUsername(); 
-        System.out.println("Sign In Successfull");
-        System.out.println("Hello " + ur);
-    }else if(count>1){
-        System.out.println("Access denied douplicate account");
-    
-    } else {
-        System.out.println("Account not found");
-    } 
-} catch(Exception x) {
-    System.out.println("DB Connection Exception " + x);
-} finally  {
-    try {
-        rs.close();
-    } catch (SQLException sqlException) {
-        sqlException.printStackTrace();
-        close();
-    }
-}
-
-        }*/
-    
-
-        public void close() {
+	
+	public void close() {
             try {
                 conn.close();
 
