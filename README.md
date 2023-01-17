@@ -109,8 +109,7 @@
     Κάνει αναδρομή μέχρι ο χρήστης να πληκτρολογήσει από τις καθορισμένες επιλογές. 
     
 #### CodeCom: διάγραμμα UML  
-![διάγραμμα UML](https://github.com/KaterinaNakou2003/programmatismos_2/blob/main/2023-01-17%20(2).png)   
-
+![διάγραμμα UML](https://github.com/KaterinaNakou2003/programmatismos_2/blob/main/image.png)  
 
 #### CodeCom: δομές δεδομένων και αλγορίθμοι 
 Η CodeCom χρησιμοποίει την εφαρμογή Microsoft SQL Management Studio (έκδοση v18.12.1), για τη δημιουργία της βάσης δεδομένων στην οποία αποθηκεύονται τα δεδομένα της εφαρμογής μας.  
