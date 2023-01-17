@@ -1,4 +1,4 @@
-package net.codejava.sql;
+package com.CodeCom.app;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
